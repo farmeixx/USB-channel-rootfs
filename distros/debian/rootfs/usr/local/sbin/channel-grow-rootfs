@@ -1,0 +1,4 @@
+#!/bin/sh
+parted -s /dev/mmcblk1 resizepart 1 100%
+partprobe /dev/mmcblk1 2>/dev/null || mdev -s 2>/dev/null || true
+resize2fs /dev/mmcblk1p1

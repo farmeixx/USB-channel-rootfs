@@ -25,6 +25,25 @@ CHECKPOINT="${KERNEL_CHECKPOINT_DIR:-$CACHE/mainline/checkpoint}"
 # Device + image policy from the conf surface; empty values keep defaults.
 source "$ROOT/conf/device.conf"
 source "$ROOT/conf/rootfs.conf"
+
+# The per-distro rootfs trees carry their own copies of the shared overlay
+# files; they must stay identical across the distros (intentional
+# differences belong in distro-specific files).
+for shared in \
+    etc/NetworkManager/conf.d/10-channel.conf \
+    usr/local/sbin/channel-grow-rootfs \
+    usr/local/sbin/channel-zram-swap \
+    usr/local/libexec/channel-wait-alsa \
+    usr/share/alsa/ucm2/conf.d/motorola-channe/motorola-channe.conf \
+    usr/share/alsa/ucm2/conf.d/motorola-channe/pulseaudio.conf; do
+  ref="distros/alpine/rootfs/$shared"
+  for other in distros/debian/rootfs distros/ubuntu/rootfs; do
+    if ! diff -q "$ref" "$other/$shared" >/dev/null 2>&1; then
+      echo "ERROR: shared overlay drifted: $other/$shared differs from $ref" >&2
+      exit 1
+    fi
+  done
+done
 : "${DEVICE:=channel}"
 case "$DISTRO" in
   alpine) export IMAGE_FREE_MIN="${IMAGE_FREE_MIN_ALPINE:-32}";;
