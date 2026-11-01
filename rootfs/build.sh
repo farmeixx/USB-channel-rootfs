@@ -70,7 +70,7 @@ export REPO_ROOT="$SECTION"
 export KERNEL_MODULES_ARCHIVE="$MODULES"
 export KERNEL_CONFIG_FILE="$VENDOR/kernel.config" KERNEL_SYSTEM_MAP_FILE="$VENDOR/System.map"
 say "Building $DEVICE $DISTRO from the vendored kernel modules; no kernel compile."
-bash "$BUILDER"
+bash -x "$BUILDER"
 
 RAW="$OUT_DIR/$DISTRO-$DEVICE-rootfs.img"
 STAMP="$(date -u +%Y%m%d%H%M%S)"
