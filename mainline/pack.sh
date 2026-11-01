@@ -12,7 +12,12 @@ mkdir -p "$OUT"
 test -s "$VENDOR/Image.gz" || { echo "missing vendor/Image.gz" >&2; exit 1; }
 test -s "$VENDOR/sdm632-motorola-channel.dtb" || { echo "missing vendor DTB" >&2; exit 1; }
 test -s "$VENDOR/mkbootimg.py" || { echo "missing vendor/mkbootimg.py" >&2; exit 1; }
-cat "$VENDOR/Image.gz" "$VENDOR/sdm632-motorola-channel.dtb" > "$OUT/Image.gz-dtb"
+command -v fdtput >/dev/null 2>&1 || { sudo apt-get update -qq; sudo apt-get install -y -qq device-tree-compiler; }
+DTB="$OUT/sdm632-motorola-channel.dtb"
+cp "$VENDOR/sdm632-motorola-channel.dtb" "$DTB"
+# sdcard wait mechanism: poll for card presence so rootwait finds it whenever the card goes in
+fdtput -t x "$DTB" /soc@0/mmc@7864900 broken-cd
+cat "$VENDOR/Image.gz" "$DTB" > "$OUT/Image.gz-dtb"
 python3 "$VENDOR/mkbootimg.py" \
   --header_version "$KERNEL_BOOT_HEADER_VERSION" \
   --kernel "$OUT/Image.gz-dtb" \
