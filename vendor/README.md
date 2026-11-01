@@ -9,3 +9,10 @@ external (no CI checkpoints, no firmware clone).
 - SHA256SUMS - checksums
 
 Source: validated alpine-20261031062555 rootfs.
+
+Boot materials (from the validated alpine-20261031062555 boot.img):
+
+- Image.gz - the validated mainline kernel image
+- sdm632-motorola-channel.dtb - the validated device tree blob
+- mkbootimg.py - pre-GKI single-file packer; pack with the KERNEL_BOOT_*
+  values from conf and any cmdline (userdata or sdcard)
