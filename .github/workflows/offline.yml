@@ -1,0 +1,35 @@
+name: Build offline (modules-included)
+on:
+  workflow_dispatch:
+    inputs:
+      distro:
+        description: alpine | debian | ubuntu
+        required: true
+        default: alpine
+permissions:
+  contents: read
+concurrency:
+  group: offline-modules-included
+  cancel-in-progress: true
+jobs:
+  offline:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: modules-included
+      - name: Pack the boot image from the vendored kernel
+        run: bash mainline/pack.sh
+      - name: Build the rootfs from the vendored modules and firmware
+        run: bash rootfs/build.sh "${{ github.event.inputs.distro }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: offline-${{ github.event.inputs.distro }}
+          path: |
+            build/rootfs/**/*
+            mainline/out/boot-channel.img
+            mainline/out/kernel-cmdline.txt
+          if-no-files-found: error
+          retention-days: 14
