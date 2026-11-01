@@ -75,3 +75,12 @@ rootfs is picked up from the card and no userdata flash is involved.
   Alpine; speaker/mic and Debian/Ubuntu runtime are not yet validated.
 
 See [firmware documentation](docs/firmware.md).
+
+## modules-included layout
+
+- vendor/ - self-contained payload: kernel modules, firmware, Image.gz,
+  DTB, mkbootimg.py, kernel metadata
+- mainline/ - packs boot-channel.img (SD-card cmdline) from the vendored
+  kernel (bash mainline/pack.sh)
+- rootfs/ - alpine/debian/ubuntu SD-card image builders consuming only
+  vendor/ (bash rootfs/build.sh <distro>)
