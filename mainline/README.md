@@ -6,4 +6,4 @@ validated alpine-20261031062555 boot.img).
 
 Run: bash mainline/pack.sh
 Result: mainline/out/boot-channel.img (cmdline from conf/mainline.conf,
-SD-card root: PARTLABEL=sdcard).
+SD-card root: PARTLABEL=usb).

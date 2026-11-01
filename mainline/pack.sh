@@ -15,7 +15,7 @@ test -s "$VENDOR/mkbootimg.py" || { echo "missing vendor/mkbootimg.py" >&2; exit
 command -v fdtput >/dev/null 2>&1 || { sudo apt-get update -qq; sudo apt-get install -y -qq device-tree-compiler; }
 DTB="$OUT/sdm632-motorola-channel.dtb"
 cp "$VENDOR/sdm632-motorola-channel.dtb" "$DTB"
-# sdcard wait mechanism: poll for card presence so rootwait finds it whenever the card goes in
+# usb wait mechanism: poll for card presence so rootwait finds it whenever the card goes in
 fdtput -t x "$DTB" /soc@0/mmc@7864900 broken-cd
 cat "$VENDOR/Image.gz" "$DTB" > "$OUT/Image.gz-dtb"
 python3 "$VENDOR/mkbootimg.py" \

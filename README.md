@@ -52,7 +52,7 @@ bash sh/run.sh ubuntu
 ```
 
 Outputs are saved under `out/rootfs/DISTRO/`: the GPT SD-card disk image
-`DISTRO-channel-rootfs.img` (single ext4 partition, `PARTLABEL=sdcard`),
+`DISTRO-channel-rootfs.img` (single ext4 partition, `PARTLABEL=usb`),
 `boot.img` copied from the kernel checkpoint, build metadata and SHA256SUMS.
 
 ## SD card boot
@@ -60,7 +60,7 @@ Outputs are saved under `out/rootfs/DISTRO/`: the GPT SD-card disk image
 Write the disk image straight to the microSD — BalenaEtcher, Rufus in dd
 mode, or `dd if=alpine-channel-rootfs.img of=/dev/sdX bs=4M conv=fsync` —
 then plug the card into the phone. From lk2nd's fastboot, `fastboot boot`
-the mainline image; its cmdline carries `root=PARTLABEL=sdcard`, so the
+the mainline image; its cmdline carries `root=PARTLABEL=usb`, so the
 rootfs is picked up from the card and no userdata flash is involved.
 
 ## Channel integration
