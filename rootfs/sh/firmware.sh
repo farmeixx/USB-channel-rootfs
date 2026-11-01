@@ -10,5 +10,5 @@ fi
 ROOTFS="$2"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 test -s "$HERE/../vendor/firmware.tar.zst"
-tar --zstd -xf "$HERE/../vendor/firmware.tar.zst" -C "$ROOTFS/lib"
+sudo tar --zstd -xf "$HERE/../vendor/firmware.tar.zst" -C "$ROOTFS/lib"
 echo "firmware: vendored bundle installed to $ROOTFS/lib/firmware"
